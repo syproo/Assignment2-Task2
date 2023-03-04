@@ -1,0 +1,261 @@
+@property --degree {
+    syntax: "<angle>";
+    inherits: false;
+    initial-value: 0deg
+}
+
+* {
+    box-sizing: border-box
+}
+
+html,
+body {
+    height: 100%;
+    margin: 0
+}
+
+body {
+    display: grid;
+    place-items: center;
+    background-color: #9b9393c2;
+    padding: 1rem;
+
+}
+
+.diagram {
+    width: min(30rem, 100%);
+    display: grid;
+    grid-template-columns: 1fr auto;
+    column-gap: 1rem;
+}
+
+@media (width < 20rem) {
+    .diagram {
+        grid-template-columns: 1fr;
+        place-items: center
+    }
+}
+
+.diagram>.item {
+    display: contents
+}
+
+/* diagram */
+.diagram>.item::after {
+    content: "";
+    grid-column: 1;
+    place-self: center;
+    grid-row: 1/calc(var(--items) + 1);
+    width: 100%;
+    aspect-ratio: 1;
+    border-radius: 50%;
+    pointer-events: none;
+
+    --degree: calc(360deg * var(--perc));
+    background-image:
+        conic-gradient(from 0deg,
+            var(--clr) var(--degree),
+            transparent calc(var(--degree) + .25deg));
+
+    --width: calc(50% / (var(--items) + .5));
+    --start: calc(var(--width) * .5 + var(--width) * var(--idx));
+    --stop: calc(var(--start) + var(--width));
+    --mask-image: radial-gradient(100% 100%,
+            transparent 0 calc(var(--start) - 1px),
+            black var(--start) var(--stop),
+            transparent calc(var(--stop) + 1px));
+    -webkit-mask-image: var(--mask-image);
+    mask-image: var(--mask-image);
+    opacity: var(--opacity, 1);
+    transition: opacity 250ms ease;
+    animation: degreeIn 5s ease;
+}
+
+@keyframes degreeIn {
+    from {
+        --degree: 0deg
+    }
+}
+
+/* label */
+.diagram>.item>label {
+    display: flex;
+    gap: 0.5rem;
+    color: #ffffff;
+    font-family: system-ui, sans-serif;
+    align-items: center;
+    padding-block: 0.5rem;
+}
+
+.diagram>.item>label::before {
+    content: "▣";
+    color: var(--clr)
+}
+
+/* hover */
+.diagram>.item:where(:hover, :focus)>label {
+    color: var(--clr)
+}
+
+/* hover label, decrease opacity other items*/
+.diagram:has(>.item>label:where(:hover, :focus))>.item:not(:where(:hover, :focus))::after {
+    --opacity: 0.1
+}
+
+/* fallback rules that contain :has() */
+@supports not selector(:has(p)) {
+    .diagram:hover> :not(.item:where(:hover, :focus))::after {
+        --opacity: 0.1
+    }
+}
+
+@import url("https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500;700;900&display=swap");
+
+* {
+    margin: 0px;
+    padding: 0px;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: "Roboto", sans-serif;
+    background: -linear-gradient(to right, #8e9eab, #eef2f3);
+    height: 100vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    -flex-wrap: wrap;
+    gap: 25px;
+
+
+}
+
+/*card style /////////*/
+.card-wrapper {
+    --color-primary: #00768b;
+    --color-secondary: #01a188;
+    --box-shadow: 7px 7px 5px 0px rgba(50, 50, 50, 0.5);
+    width: 200px;
+}
+
+.card-header {
+    width: 90%;
+    background: #fff;
+    margin: 0 auto;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding: 50px 15px;
+    border-top-left-radius: 70px;
+    z-index: 2;
+    position: relative;
+    box-shadow: var(--box-shadow);
+}
+
+.card-header:after {
+    content: "";
+    position: absolute;
+    bottom: -15px;
+    right: 20%;
+    width: 30px;
+    height: 30px;
+    background: #fff;
+    box-shadow: var(--box-shadow);
+    transform: rotate(45deg);
+    z-index: 1;
+}
+
+.card-header i {
+    font-size: 40px;
+    color: var(--color-primary);
+}
+
+.card-header h1,
+.card-header h2 {
+    text-transform: uppercase;
+    color: var(--color-primary);
+}
+
+.card-header h1 {
+    font-size: 18px;
+}
+
+.card-header h2 {
+    font-size: 14px;
+    margin-top: 15px;
+}
+
+.card-header p {
+    font-size: 12px;
+    text-align: justify;
+    margin-top: 10px;
+}
+
+.card-footer {
+    width: 100%;
+    height: 250px;
+    background-image: linear-gradient(to right bottom,
+            var(--color-secondary),
+            var(--color-primary));
+    display: flex;
+    flex-direction: column;
+    justify-content: end;
+    align-items: start;
+    margin-top: -150px;
+    border-radius: 5px 5px 70px 0px;
+    color: #fff;
+    overflow: hidden;
+}
+
+.card-footer .footer-content-wrap {
+    padding: 0 30px 10px 20px;
+
+    display: flex;
+    justify-content: space-between;
+    width: 100%;
+    align-items: center;
+}
+
+.card-footer .footer-text-wrap {
+    text-align: center;
+    color: rgba(255, 255, 255, 0.3);
+}
+
+.card-footer i {
+    font-size: 48px;
+    color: rgba(255, 255, 255, 0.7);
+}
+
+.card-footer h1 {
+    font-size: 60px;
+    line-height: 0.85;
+    font-weight: 400;
+}
+
+.card-footer p {
+    font-size: 12px;
+    text-transform: uppercase;
+}
+
+/*set card color ///////*/
+
+.card-wrapper.one {
+    --color-primary: #45b649;
+    --color-secondary: #dce35b;
+}
+
+.card-wrapper.two {
+    --color-primary: #fc4a1a;
+    --color-secondary: #f7b733;
+}
+
+.card-wrapper.three {
+    --color-primary: #7b920a;
+    --color-secondary: #add100;
+}
+
+.card-wrapper.four {
+    --color-primary: #000046;
+    --color-secondary: #1cb5e0;
+}
